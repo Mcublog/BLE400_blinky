@@ -3,8 +3,8 @@
 
 #include "nrf_delay.h"//функции задержки
 #include "nrf_gpio.h"//драйвер gpio
-
-#include "app_pwm.h"
+#include "pstorage.h"
+//#include "app_pwm.h"
 
 #include "ble_nus.h"
 #include "ble_advdata.h"
@@ -38,18 +38,18 @@
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(30000, APP_TIMER_PRESCALER) /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
-#define START_STRING                    "Start...\n"                                /**< The string that will be sent over the UART when the application starts. */
-
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
-
-#define UART_TX_BUF_SIZE                256                                         /**< UART TX buffer size. */
-#define UART_RX_BUF_SIZE                256                                         /**< UART RX buffer size. */
 
 static ble_nus_t                        m_nus;                                      /**< Structure to identify the Nordic UART Service. */
 static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;    /**< Handle of the current connection. */
 
 static ble_uuid_t                       m_adv_uuids[] = {{BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE}};  /**< Universally unique service identifier. */
 
+//APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
+
+#define LED0    (21)
+#define LED1    (22)
+#define MCTRL   (23)
 
 /**@brief Function for assert macro callback.
  *
@@ -110,7 +110,7 @@ static void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t lengt
 {   
     switch(p_data[0])
     {
-//        case '1': nrf_gpio_pin_toggle(LED_1); break;
+        case '1': nrf_gpio_pin_toggle(LED1); break;
 //        case '2': nrf_gpio_pin_toggle(LED_2); break;
 //        case '3': nrf_gpio_pin_toggle(LED_3); break;        
 //        case '4': nrf_gpio_pin_toggle(LED_4); break;
@@ -196,7 +196,7 @@ static void conn_params_init(void)
  */
 static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 {
-    uint32_t err_code;
+    uint32_t err_code = 0;
 
     switch (ble_adv_evt)
     {
@@ -276,7 +276,7 @@ static void ble_stack_init(void)
     uint32_t err_code;
     
     // Initialize SoftDevice.
-    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_20_PPM, NULL);
+    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_250_PPM, NULL);
     
     ble_enable_params_t ble_enable_params;
     err_code = softdevice_enable_get_default_config(CENTRAL_LINK_COUNT,
@@ -358,45 +358,42 @@ static void advertising_init(void)
 }
 
 
-
-APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
-
-#define LED0    (10)//в скобках номер пина
-#define MCTRL   (1)
-
 int main(void)
 {
     ret_code_t err_code;
     
+    pstorage_init();
     nrf_gpio_cfg_output(LED0);
-       
-//    // Initialize.
-//    APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
-//    
-//    ble_stack_init();
-//    gap_params_init();
-//    services_init();
-//    advertising_init();
-//    conn_params_init();
-//    
-//    err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
-//    APP_ERROR_CHECK(err_code);
+    nrf_gpio_cfg_output(LED1);
+          
+    // Initialize.
+    APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
+    
+    ble_stack_init();
+    gap_params_init();
+    services_init();
+    advertising_init();
+    conn_params_init();
+    
+    err_code = ble_advertising_start(BLE_ADV_MODE_FAST);
+    APP_ERROR_CHECK(err_code);
 
     //------------ PWM Config ---------------------
-    /* 1-channel PWM, 200Hz, output on DK LED pins. */
-    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(100, MCTRL);
-    /* Switch the polarity of the second channel. */
-    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
-    
-    /* Initialize and enable PWM. */
-    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
-    APP_ERROR_CHECK(err_code);
-    app_pwm_enable(&PWM1);
-    
-    uint32_t value = 15;
-    app_pwm_channel_duty_set(&PWM1, 0, value);
+//    /* 1-channel PWM, 200Hz, output on DK LED pins. */
+//    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(100, MCTRL);
+//    /* Switch the polarity of the second channel. */
+//    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
+//    
+//    /* Initialize and enable PWM. */
+//    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
+//    APP_ERROR_CHECK(err_code);
+//    app_pwm_enable(&PWM1);
+//    
+//    uint32_t value = 15;
+//    app_pwm_channel_duty_set(&PWM1, 0, value);
     //--------------------------------------------    
     
+    nrf_gpio_pin_toggle(LED0); 
     
     while(1)
     {
