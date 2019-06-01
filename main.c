@@ -65,10 +65,10 @@ int main(void)
     /* Initialize and enable PWM. */
     err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
     APP_ERROR_CHECK(err_code);
-    app_pwm_enable(&PWM1);
-    
-    uint32_t value = 15;
-    app_pwm_channel_duty_set(&PWM1, 0, value);
+//    app_pwm_enable(&PWM1);
+//    
+//    uint32_t value = 15;
+//    app_pwm_channel_duty_set(&PWM1, 0, value);
     //--------------------------------------------    
     
     nrf_gpio_pin_toggle(LED0); 
