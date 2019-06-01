@@ -4,7 +4,7 @@
 #include "nrf_delay.h"//функции задержки
 #include "nrf_gpio.h"//драйвер gpio
 #include "pstorage.h"
-//#include "app_pwm.h"
+#include "app_pwm.h"
 
 #include "ble_nus.h"
 #include "ble_advdata.h"
@@ -45,7 +45,7 @@ static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;
 
 static ble_uuid_t                       m_adv_uuids[] = {{BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE}};  /**< Universally unique service identifier. */
 
-//APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
+APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
 
 #define LED0    (21)
 #define LED1    (22)
@@ -379,18 +379,18 @@ int main(void)
     APP_ERROR_CHECK(err_code);
 
     //------------ PWM Config ---------------------
-//    /* 1-channel PWM, 200Hz, output on DK LED pins. */
-//    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(100, MCTRL);
-//    /* Switch the polarity of the second channel. */
-//    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
-//    
-//    /* Initialize and enable PWM. */
-//    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
-//    APP_ERROR_CHECK(err_code);
-//    app_pwm_enable(&PWM1);
-//    
-//    uint32_t value = 15;
-//    app_pwm_channel_duty_set(&PWM1, 0, value);
+    /* 1-channel PWM, 200Hz, output on DK LED pins. */
+    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(1000, MCTRL);
+    /* Switch the polarity of the second channel. */
+    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
+    
+    /* Initialize and enable PWM. */
+    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
+    APP_ERROR_CHECK(err_code);
+    app_pwm_enable(&PWM1);
+    
+    uint32_t value = 15;
+    app_pwm_channel_duty_set(&PWM1, 0, value);
     //--------------------------------------------    
     
     nrf_gpio_pin_toggle(LED0); 
