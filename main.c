@@ -110,9 +110,18 @@ static void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t lengt
 {   
     switch(p_data[0])
     {
-        case '1': nrf_gpio_pin_toggle(LED1); break;
+        case '1':
+        {
+            nrf_gpio_pin_toggle(LED1);
+            app_pwm_disable(&PWM1);
+        }break;
 //        case '2': nrf_gpio_pin_toggle(LED_2); break;
-//        case '3': nrf_gpio_pin_toggle(LED_3); break;        
+        case '3':
+        {
+            app_pwm_enable(&PWM1);
+            app_pwm_channel_duty_set(&PWM1, 0, 15);
+            nrf_gpio_pin_toggle(LED1);
+        }break;
 //        case '4': nrf_gpio_pin_toggle(LED_4); break;
     }
 }
