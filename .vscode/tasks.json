@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",
+            "args": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            "label": "gcc build active file",
+            "command": "make",
+            "args": [
+                "--makefile=${fileDirname}/Makefile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make",
+            "args": [],
+            "group": "clean",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "shell",
+            "label": "gcc clean",
+            "command": "make",
+            "args": [                
+                "--makefile=${fileDirname}/Makefile",
+                "clean",
+            ],
+            "group": {
+                "kind": "clean",
+                "isDefault": true
+            }
+        }        
+    ]
+}
