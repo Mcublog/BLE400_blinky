@@ -389,6 +389,11 @@
               <FileType>5</FileType>
               <FilePath>..\Test_ble\src\custom_board.h</FilePath>
             </File>
+            <File>
+              <FileName>ble_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ble_config.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
