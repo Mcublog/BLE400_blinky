@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>S130 NRF51 SOFTDEVICE_PRESENT BOARD_CUSTOM BLE_STACK_SUPPORT_REQD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\BLE400_blinky</IncludePath>
+              <IncludePath>..\BLE400_blinky;.\include;.\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -377,17 +377,17 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
+          <GroupName>src</GroupName>
           <Files>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
-            </File>
             <File>
               <FileName>ble_config.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\ble_config.c</FilePath>
+              <FilePath>.\src\ble_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\main.c</FilePath>
             </File>
           </Files>
         </Group>
