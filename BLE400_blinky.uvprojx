@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>S130 NRF51 SOFTDEVICE_PRESENT BOARD_CUSTOM BLE_STACK_SUPPORT_REQD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Test_ble;..\Test_ble\src</IncludePath>
+              <IncludePath>..\BLE400_blinky</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -383,11 +383,6 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>custom_board.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Test_ble\src\custom_board.h</FilePath>
             </File>
             <File>
               <FileName>ble_config.c</FileName>

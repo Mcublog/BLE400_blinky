@@ -12,7 +12,7 @@
 #include "ble_config.h"
 
 
-APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
+//APP_PWM_INSTANCE( PWM1, 1); // Create the instance "PWM1" using TIMER1.
 
 
 void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t length)
@@ -22,13 +22,12 @@ void nus_data_handler(ble_nus_t * p_nus, uint8_t * p_data, uint16_t length)
         case '1':
         {
             nrf_gpio_pin_toggle(LED1);
-            app_pwm_disable(&PWM1);
+            nrf_gpio_pin_clear(MCTRL);
         }break;
 //        case '2': nrf_gpio_pin_toggle(LED_2); break;
         case '3':
         {
-            app_pwm_enable(&PWM1);
-            app_pwm_channel_duty_set(&PWM1, 0, 15);
+            nrf_gpio_pin_set(MCTRL);
             nrf_gpio_pin_toggle(LED1);
         }break;
 //        case '4': nrf_gpio_pin_toggle(LED_4); break;
@@ -43,6 +42,7 @@ int main(void)
     pstorage_init();
     nrf_gpio_cfg_output(LED0);
     nrf_gpio_cfg_output(LED1);
+    nrf_gpio_cfg_output(MCTRL);
           
     // Initialize.
     APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
@@ -58,13 +58,13 @@ int main(void)
 
     //------------ PWM Config ---------------------
     /* 1-channel PWM, 200Hz, output on DK LED pins. */
-    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(1000, MCTRL);
-    /* Switch the polarity of the second channel. */
-    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
-    
-    /* Initialize and enable PWM. */
-    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
-    APP_ERROR_CHECK(err_code);
+//    app_pwm_config_t pwm1_cfg = APP_PWM_DEFAULT_CONFIG_1CH(1000, MCTRL);
+//    /* Switch the polarity of the second channel. */
+//    pwm1_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
+//    
+//    /* Initialize and enable PWM. */
+//    err_code = app_pwm_init(&PWM1,&pwm1_cfg, NULL);
+//    APP_ERROR_CHECK(err_code);
 //    app_pwm_enable(&PWM1);
 //    
 //    uint32_t value = 15;
